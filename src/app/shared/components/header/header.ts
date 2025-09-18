@@ -13,7 +13,7 @@ import { Auth } from 'src/app/features/auth/services/auth';
         <nav>
           <ul class="flex space-x-4">
             @if (currentUser()) {
-              <li><a routerLink="/todos" class="hover:text-blue-200">Todos</a></li>
+              <li><a routerLink="/home" class="hover:text-blue-200">Home</a></li>
               @if (currentUser()?.role === 'admin') {
                 <li><a routerLink="/admin" class="hover:text-blue-200">Admin</a></li>
               }
