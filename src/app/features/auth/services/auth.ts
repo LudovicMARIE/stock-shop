@@ -82,6 +82,10 @@ export class Auth {
     return this._currentUser();
   }
 
+  isAdmin(): boolean {
+    return this._currentUser()?.role === 'admin';
+  }
+
   getAllUsers(): Observable<User[]> {
     return of(this.users).pipe(delay(300));
   }

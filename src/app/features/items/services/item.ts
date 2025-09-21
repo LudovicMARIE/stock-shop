@@ -15,6 +15,7 @@ export class ItemService {
       id: '2',
       name: 'Desk Chair',
       description: 'Ergonomic chair for comfortable sitting',
+      photo: 'https://via.placeholder.com/200',
       quantity: 5,
     },
   ]);
