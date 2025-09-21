@@ -3,12 +3,20 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ItemService } from '../../services/item';
 import { Item } from '../../models/item';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-item-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
+    <button
+      routerLink="/"
+      class="mb-6 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+    >
+      ← Back to Home
+    </button>
+
     @if (item) {
       <div class="container mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
         <h2 class="text-2xl font-bold mb-2">{{ item.name }}</h2>
