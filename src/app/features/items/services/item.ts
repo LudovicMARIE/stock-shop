@@ -42,4 +42,8 @@ export class ItemService {
   remove(id: string) {
     this._items.update((items) => items.filter((i) => i.id !== id));
   }
+
+  getAllItems(): Item[] {
+    return this._items();
+  }
 }

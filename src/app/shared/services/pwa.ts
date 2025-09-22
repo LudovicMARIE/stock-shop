@@ -19,16 +19,16 @@ export class PwaService {
   private swUpdate = inject(SwUpdate);
   private errorService = inject(ErrorService);
 
-  // Signals pour l'état PWA
+  // Signals for PWA state
   private deferredPrompt = signal<BeforeInstallPromptEvent | null>(null);
   private isInstalled = signal<boolean>(false);
   private isOnline = signal<boolean>(navigator.onLine);
   private updateAvailable = signal<boolean>(false);
 
-  // Computed pour l'état d'installation
+  // Computed for installation state
   canInstall = computed(() => !!this.deferredPrompt() && !this.isInstalled());
 
-  // État public readonly
+  // public state readonly
   readonly installPrompt = this.deferredPrompt.asReadonly();
   readonly installed = this.isInstalled.asReadonly();
   readonly online = this.isOnline.asReadonly();
@@ -41,17 +41,17 @@ export class PwaService {
   }
 
   /**
-   * Initialise les événements PWA
+   * init PWA events
    */
   private initializePwa(): void {
-    // Détection de l'événement d'installation
+    // Event install detection
     window.addEventListener('beforeinstallprompt', (event: Event) => {
       console.warn('[PWA] Installation prompt available');
       event.preventDefault();
       this.deferredPrompt.set(event as BeforeInstallPromptEvent);
     });
 
-    // Détection si l'app est déjà installée
+    // detection if app is installed
     window.addEventListener('appinstalled', () => {
       console.warn('[PWA] App installed successfully');
       this.isInstalled.set(true);
@@ -59,12 +59,12 @@ export class PwaService {
       this.errorService.showInfo('Application installée avec succès !');
     });
 
-    // Vérification initiale si l'app est en mode standalone
+    // check if app is in standalone mode
     this.checkIfInstalled();
   }
 
   /**
-   * Vérifie si l'app est en mode standalone (installée)
+   * Verify if app is installed (standalone mode)
    */
   private checkIfInstalled(): void {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
@@ -76,7 +76,7 @@ export class PwaService {
   }
 
   /**
-   * Configure l'écoute du statut réseau
+   * Configure network state listeners
    */
   private setupNetworkListener(): void {
     window.addEventListener('online', () => {
@@ -93,11 +93,11 @@ export class PwaService {
   }
 
   /**
-   * Configure l'écoute des mises à jour du service worker
+   * Configure service worker update listeners
    */
   private setupUpdateListener(): void {
     if (this.swUpdate.isEnabled) {
-      // Vérification des mises à jour
+      // check update
       this.swUpdate.versionUpdates
         .pipe(filter((event): event is VersionReadyEvent => event.type === 'VERSION_READY'))
         .subscribe(() => {
@@ -106,7 +106,7 @@ export class PwaService {
           this.errorService.showInfo('Nouvelle version disponible !');
         });
 
-      // Vérification périodique (toutes les 6 heures)
+      // Periodic verification for updates
       setInterval(
         () => {
           this.swUpdate
@@ -121,12 +121,12 @@ export class PwaService {
             });
         },
         6 * 60 * 60 * 1000,
-      ); // 6 heures
+      ); // 6 hours
     }
   }
 
   /**
-   * Propose l'installation de l'app
+   * Propose app installation
    */
   async installApp(): Promise<boolean> {
     const prompt = this.deferredPrompt();
@@ -156,7 +156,7 @@ export class PwaService {
   }
 
   /**
-   * Active la mise à jour du service worker
+   * Activate service worker update
    */
   async activateUpdate(): Promise<void> {
     if (!this.swUpdate.isEnabled || !this.updateAvailable()) {
@@ -168,7 +168,7 @@ export class PwaService {
       this.updateAvailable.set(false);
       this.errorService.showInfo('Mise à jour appliquée, rechargement...');
 
-      // Rechargement après un court délai
+      // Reload after short delay
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -179,7 +179,7 @@ export class PwaService {
   }
 
   /**
-   * Partage du contenu via l'API Web Share
+   * Content sharing via Web Share API
    */
   async shareContent(data: { title?: string; text?: string; url?: string }): Promise<boolean> {
     if (!navigator.share) {
@@ -201,7 +201,7 @@ export class PwaService {
   }
 
   /**
-   * Obtient des statistiques PWA
+   * Gather PWA stats
    */
   getStats() {
     return {
