@@ -5,11 +5,12 @@ import { Auth } from 'src/app/features/auth/services/auth';
 import { User } from '../../../auth/models/user';
 import { Item } from 'src/app/features/items/models/item';
 import { ItemService } from 'src/app/features/items/services/item';
+import { CreateItemForm } from 'src/app/shared/components/create-item-form/create-item-form';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CreateItemForm],
   template: `
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="mb-8">
@@ -40,6 +41,26 @@ import { ItemService } from 'src/app/features/items/services/item';
           </button>
         </nav>
       </div>
+
+      <!-- Notifications -->
+      @if (message) {
+        <div
+          class="relative text-center mt-4 p-3 rounded-md shadow-sm"
+          [class.text-green-600]="!error"
+          [class.text-red-600]="error"
+          [class.bg-green-50]="!error"
+          [class.bg-red-50]="error"
+        >
+          {{ message }}
+          <button
+            type="button"
+            (click)="message = ''; error = false"
+            class="absolute top-1 right-2 text-gray-500 hover:text-gray-700"
+          >
+            ✕
+          </button>
+        </div>
+      }
 
       <!-- Tab Content-->
       @if (activeTab() === 'users') {
@@ -127,6 +148,15 @@ import { ItemService } from 'src/app/features/items/services/item';
 
       <!-- Stock Tab -->
       @if (activeTab() === 'stock') {
+        <button
+          (click)="toggleForm()"
+          class="mb-6 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          + Add New Item
+        </button>
+        @if (showForm) {
+          <app-item-form (save)="createItem($event)"></app-item-form>
+        }
         <div class="bg-white shadow rounded-lg">
           <div class="px-6 py-4 border-b border-gray-200">
             <h2 class="text-xl font-semibold text-gray-900">Manage stock</h2>
@@ -226,6 +256,10 @@ export class AdminComponent implements OnInit {
   activeTab = signal<'users' | 'stock'>('users');
   users = signal<User[]>([]);
   items = signal<Item[]>([]);
+  showForm = false;
+  loading = false;
+  message = '';
+  error = false;
 
   async ngOnInit() {
     // Check if user is admin
@@ -278,5 +312,28 @@ export class AdminComponent implements OnInit {
         console.error('Error while deleting:', error);
       }
     }
+  }
+
+  async createItem(newItem: Item) {
+    this.loading = true;
+    this.message = '';
+    this.error = false;
+
+    try {
+      this.itemService.add(newItem);
+      this.message = '✅ Item created successfully!';
+      this.showForm = false;
+      await this.loadItems();
+    } catch (err) {
+      console.error(err);
+      this.message = '❌ Error creating item';
+      this.error = true;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  toggleForm() {
+    this.showForm = !this.showForm;
   }
 }
