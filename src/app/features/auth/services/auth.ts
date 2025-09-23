@@ -87,7 +87,7 @@ export class Auth {
   }
 
   getAllUsers(): Observable<User[]> {
-    return of(this.users).pipe(delay(300));
+    return of(this.users).pipe(delay(3000));
   }
 
   deleteUser(userId: number): Observable<void> {

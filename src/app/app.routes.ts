@@ -19,7 +19,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [authGuard, adminGuard], // Admin protection
+    canActivate: [authGuard, adminGuard], // Auth and admin protection
     loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
 ];

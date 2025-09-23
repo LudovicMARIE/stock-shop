@@ -139,18 +139,16 @@ export class PwaService {
       await prompt.prompt();
       const { outcome } = await prompt.userChoice;
 
-      console.warn(`[PWA] Install prompt result: ${outcome}`);
-
       if (outcome === 'accepted') {
-        this.errorService.showInfo('Installation en cours...');
+        this.errorService.showInfo('Install in progress...');
         return true;
       } else {
-        this.errorService.showInfo('Installation annulée');
+        this.errorService.showInfo('Installation cancelled');
         return false;
       }
     } catch (error) {
       console.error('[PWA] Install error:', error);
-      this.errorService.showError("Erreur lors de l'installation");
+      this.errorService.showError('Error while installing');
       return false;
     }
   }

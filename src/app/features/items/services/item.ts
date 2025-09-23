@@ -1,4 +1,4 @@
-import { Injectable, signal, WritableSignal, computed } from '@angular/core';
+import { Injectable, signal, WritableSignal, computed, effect } from '@angular/core';
 import { Item } from '../models/item';
 
 @Injectable({ providedIn: 'root' })
@@ -19,6 +19,16 @@ export class ItemService {
       quantity: 5,
     },
   ]);
+
+  constructor() {
+    // Automatic effect
+    effect(() => {
+      const items = this.getAllItems();
+
+      // save in localStorage
+      localStorage.setItem('items', JSON.stringify(items));
+    });
+  }
 
   public readonly items = this._items.asReadonly();
 

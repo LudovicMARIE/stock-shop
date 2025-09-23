@@ -43,18 +43,18 @@ import { CreateItemForm } from 'src/app/shared/components/create-item-form/creat
       </div>
 
       <!-- Notifications -->
-      @if (message) {
+      @if (message()) {
         <div
           class="relative text-center mt-4 p-3 rounded-md shadow-sm"
-          [class.text-green-600]="!error"
-          [class.text-red-600]="error"
-          [class.bg-green-50]="!error"
-          [class.bg-red-50]="error"
+          [class.text-green-600]="!error()"
+          [class.text-red-600]="error()"
+          [class.bg-green-50]="!error()"
+          [class.bg-red-50]="error()"
         >
-          {{ message }}
+          {{ message() }}
           <button
             type="button"
-            (click)="message = ''; error = false"
+            (click)="message() === ''; error() === false"
             class="absolute top-1 right-2 text-gray-500 hover:text-gray-700"
           >
             ✕
@@ -139,6 +139,8 @@ import { CreateItemForm } from 'src/app/shared/components/create-item-form/creat
                   </tbody>
                 </table>
               </div>
+            } @else if (loading()) {
+              <p class="text-gray-500 text-center py-8">Loading...</p>
             } @else {
               <p class="text-gray-500 text-center py-8">No user found</p>
             }
@@ -154,7 +156,7 @@ import { CreateItemForm } from 'src/app/shared/components/create-item-form/creat
         >
           + Add New Item
         </button>
-        @if (showForm) {
+        @if (showForm()) {
           <app-item-form (save)="createItem($event)"></app-item-form>
         }
         <div class="bg-white shadow rounded-lg">
@@ -256,10 +258,10 @@ export class AdminComponent implements OnInit {
   activeTab = signal<'users' | 'stock'>('users');
   users = signal<User[]>([]);
   items = signal<Item[]>([]);
-  showForm = false;
-  loading = false;
-  message = '';
-  error = false;
+  showForm = signal<boolean>(false);
+  loading = signal<boolean>(true);
+  message = signal<string>('');
+  error = signal<boolean>(false);
 
   async ngOnInit() {
     // Check if user is admin
@@ -283,12 +285,18 @@ export class AdminComponent implements OnInit {
   }
 
   async loadUsers() {
+    this.loading.set(true);
+    console.log('loading = true');
     try {
       this.authService.getAllUsers().subscribe((users) => {
         this.users.set(users);
+        this.loading.set(false);
+        console.log('loading = false');
       });
     } catch (error) {
       console.error('Error while loading users :', error);
+      this.loading.set(false);
+      console.log('loading = false');
     }
   }
 
@@ -315,25 +323,25 @@ export class AdminComponent implements OnInit {
   }
 
   async createItem(newItem: Item) {
-    this.loading = true;
-    this.message = '';
-    this.error = false;
+    this.loading.set(true);
+    this.message.set('');
+    this.error.set(false);
 
     try {
       this.itemService.add(newItem);
-      this.message = '✅ Item created successfully!';
-      this.showForm = false;
+      this.message.set('✅ Item created successfully!');
+      this.showForm.set(false);
       await this.loadItems();
     } catch (err) {
       console.error(err);
-      this.message = '❌ Error creating item';
-      this.error = true;
+      this.message.set('❌ Error creating item');
+      this.error.set(true);
     } finally {
-      this.loading = false;
+      this.loading.set(false);
     }
   }
 
   toggleForm() {
-    this.showForm = !this.showForm;
+    this.showForm.set(!this.showForm());
   }
 }
