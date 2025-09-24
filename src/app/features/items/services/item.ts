@@ -8,14 +8,16 @@ export class ItemService {
       id: '1',
       name: 'Laptop',
       description: 'High-performance laptop for work and play',
-      photo: 'https://via.placeholder.com/200',
+      photo:
+        'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
       quantity: 10,
     },
     {
       id: '2',
       name: 'Desk Chair',
       description: 'Ergonomic chair for comfortable sitting',
-      photo: 'https://via.placeholder.com/200',
+      photo:
+        'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
       quantity: 5,
     },
   ]);

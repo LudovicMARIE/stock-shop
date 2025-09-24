@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Pwa } from './pwa';
+import { PwaService } from './pwa';
 
 describe('Pwa', () => {
-  let service: Pwa;
+  let service: PwaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Pwa);
+    service = TestBed.inject(PwaService);
   });
 
   it('should be created', () => {
