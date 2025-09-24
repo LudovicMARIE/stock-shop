@@ -6,11 +6,12 @@ import { User } from '../../../auth/models/user';
 import { Item } from 'src/app/features/items/models/item';
 import { ItemService } from 'src/app/features/items/services/item';
 import { CreateItemForm } from 'src/app/shared/components/create-item-form/create-item-form';
+import { OrdersComponent } from 'src/app/features/order/components/orders/orders';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, CreateItemForm],
+  imports: [CommonModule, CreateItemForm, OrdersComponent],
   template: `
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="mb-8">
@@ -39,6 +40,15 @@ import { CreateItemForm } from 'src/app/shared/components/create-item-form/creat
           >
             Stock
           </button>
+          <button
+            (click)="activeTab.set('orders')"
+            [class.bg-blue-600]="activeTab() === 'orders'"
+            [class.text-white]="activeTab() === 'orders'"
+            [class.text-gray-700]="activeTab() !== 'orders'"
+            class="px-4 py-2 rounded-md font-medium hover:bg-blue-700 hover:text-white transition-colors"
+          >
+            Orders
+          </button>
         </nav>
       </div>
 
@@ -54,7 +64,7 @@ import { CreateItemForm } from 'src/app/shared/components/create-item-form/creat
           {{ message() }}
           <button
             type="button"
-            (click)="message() === ''; error() === false"
+            (click)="message.set(''); error.set(false)"
             class="absolute top-1 right-2 text-gray-500 hover:text-gray-700"
           >
             ✕
@@ -247,6 +257,10 @@ import { CreateItemForm } from 'src/app/shared/components/create-item-form/creat
           </div>
         </div>
       }
+
+      @if (activeTab() === 'orders') {
+        <app-orders></app-orders>
+      }
     </div>
   `,
 })
@@ -255,7 +269,7 @@ export class AdminComponent implements OnInit {
   private router = inject(Router);
   public itemService = inject(ItemService);
 
-  activeTab = signal<'users' | 'stock'>('users');
+  activeTab = signal<'users' | 'stock' | 'orders'>('users');
   users = signal<User[]>([]);
   items = signal<Item[]>([]);
   showForm = signal<boolean>(false);
@@ -286,17 +300,14 @@ export class AdminComponent implements OnInit {
 
   async loadUsers() {
     this.loading.set(true);
-    console.log('loading = true');
     try {
       this.authService.getAllUsers().subscribe((users) => {
         this.users.set(users);
         this.loading.set(false);
-        console.log('loading = false');
       });
     } catch (error) {
       console.error('Error while loading users :', error);
       this.loading.set(false);
-      console.log('loading = false');
     }
   }
 

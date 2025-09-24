@@ -56,4 +56,10 @@ export class ItemService {
   getAllItems(): Item[] {
     return this._items();
   }
+
+  decreaseQuantity(id: string, quantity: number) {
+    this._items.update((items) =>
+      items.map((i) => (i.id === id ? { ...i, quantity: Math.max(0, i.quantity - quantity) } : i)),
+    );
+  }
 }
