@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { Home } from './home';
+import { ItemService } from 'src/app/features/items/services/item';
+import { Auth } from 'src/app/features/auth/services/auth';
 
 describe('Home', () => {
   let component: Home;
@@ -8,7 +11,12 @@ describe('Home', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Home],
+      imports: [Home], // standalone component
+      providers: [
+        ItemService,
+        Auth,
+        provideRouter([]), // 👈 fixes ActivatedRoute/RouterLink
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);

@@ -78,7 +78,9 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/ngsw-worker.js",
+              "src/ngsw.json"
             ],
             "styles": ["src/styles.scss"]
           }
