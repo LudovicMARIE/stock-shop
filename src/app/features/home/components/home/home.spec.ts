@@ -12,11 +12,7 @@ describe('Home', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Home], // standalone component
-      providers: [
-        ItemService,
-        Auth,
-        provideRouter([]), // 👈 fixes ActivatedRoute/RouterLink
-      ],
+      providers: [ItemService, Auth, provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);

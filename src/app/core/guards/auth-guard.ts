@@ -9,13 +9,13 @@ export const authGuard: CanActivateFn = (route, state) => {
   const currentUser = authService.getCurrentUser();
 
   if (currentUser) {
-    return true; // Accès autorisé
+    return true; // Autorized
   } else {
-    // Rediriger vers login avec l'URL de retour
+    // Redirect to login page with the return url
 
     router.navigate(['/auth/login'], {
       queryParams: { returnUrl: state.url },
     });
-    return false; // Accès refusé
+    return false; // Refused
   }
 };

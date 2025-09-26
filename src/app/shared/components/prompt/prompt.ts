@@ -7,7 +7,7 @@ import { PwaService } from '../../services/pwa';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <!-- Prompt d'installation -->
+    <!-- Install prompt -->
     @if (pwaService.canInstall()) {
       <div class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50">
         <div class="bg-blue-600 text-white p-4 rounded-lg shadow-lg border border-blue-500">
@@ -23,22 +23,20 @@ import { PwaService } from '../../services/pwa';
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <h4 class="font-semibold text-sm">Installer l'application</h4>
-              <p class="text-blue-100 text-xs mt-1">
-                Accédez rapidement à TodoList depuis votre écran d'accueil
-              </p>
+              <h4 class="font-semibold text-sm">Install app</h4>
+              <p class="text-blue-100 text-xs mt-1">Access the app faster and offline</p>
               <div class="flex gap-2 mt-3">
                 <button
                   (click)="installApp()"
                   class="bg-white text-blue-600 px-3 py-1 rounded text-xs font-medium hover:bg-blue-50 transition-colors"
                 >
-                  Installer
+                  Install
                 </button>
                 <button
                   (click)="dismissPrompt()"
                   class="text-blue-100 px-3 py-1 rounded text-xs hover:text-white transition-colors"
                 >
-                  Plus tard
+                  Later
                 </button>
               </div>
             </div>
@@ -57,7 +55,7 @@ import { PwaService } from '../../services/pwa';
       </div>
     }
 
-    <!-- Notification de mise à jour -->
+    <!-- Update notification -->
     @if (pwaService.hasUpdate()) {
       <div class="fixed top-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50">
         <div class="bg-green-600 text-white p-4 rounded-lg shadow-lg border border-green-500">
@@ -73,22 +71,20 @@ import { PwaService } from '../../services/pwa';
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <h4 class="font-semibold text-sm">Mise à jour disponible</h4>
-              <p class="text-green-100 text-xs mt-1">
-                Une nouvelle version de l'application est prête
-              </p>
+              <h4 class="font-semibold text-sm">Update available</h4>
+              <p class="text-green-100 text-xs mt-1">A new version is available to download</p>
               <div class="flex gap-2 mt-3">
                 <button
                   (click)="updateApp()"
                   class="bg-white text-green-600 px-3 py-1 rounded text-xs font-medium hover:bg-green-50 transition-colors"
                 >
-                  Mettre à jour
+                  Update
                 </button>
                 <button
                   (click)="dismissUpdate()"
                   class="text-green-100 px-3 py-1 rounded text-xs hover:text-white transition-colors"
                 >
-                  Plus tard
+                  Later
                 </button>
               </div>
             </div>
@@ -97,7 +93,7 @@ import { PwaService } from '../../services/pwa';
       </div>
     }
 
-    <!-- Indicateur hors ligne -->
+    <!-- Offline indicator -->
     @if (!pwaService.online()) {
       <div class="fixed top-0 left-0 right-0 z-40">
         <div class="bg-amber-500 text-white text-center py-2 px-4">
@@ -110,7 +106,7 @@ import { PwaService } from '../../services/pwa';
                 d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.5v19M12 2.5a9.5 9.5 0 110 19M12 2.5a9.5 9.5 0 010 19"
               />
             </svg>
-            <span>Mode hors ligne - Vos données sont synchronisées localement</span>
+            <span>Offline mode - Your datas are synchronised locally</span>
           </div>
         </div>
       </div>
@@ -129,12 +125,10 @@ export class PwaPromptComponent {
   }
 
   dismissPrompt(): void {
-    // On pourrait stocker cette préférence en localStorage
     console.warn('[PWA] Install prompt dismissed');
   }
 
   dismissUpdate(): void {
-    // On pourrait reporter la notification de mise à jour
     console.warn('[PWA] Update prompt dismissed');
   }
 }

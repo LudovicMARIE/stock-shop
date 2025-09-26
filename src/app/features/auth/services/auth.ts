@@ -8,7 +8,7 @@ export class Auth {
   private _currentUser: WritableSignal<User | null> = signal<User | null>(null);
   public currentUser = this._currentUser.asReadonly();
 
-  // Mock data - utilisateurs de test
+  // Mock data - test users
   private users: User[] = [
     {
       id: 1,
@@ -24,14 +24,14 @@ export class Auth {
     },
   ];
 
-  // Mock data - mots de passe (en réalité, ils seraient hashés)
+  // Mock data - password (in reality they should be hashed and securely stored)
   private passwords: Record<string, string> = {
     'admin@example.com': 'admin123',
     'user@example.com': 'user123',
   };
 
   constructor() {
-    // Vérifier s'il y a un utilisateur en session
+    // Verify if there's a saved user in localStorage
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       this._currentUser.set(JSON.parse(savedUser));
@@ -43,7 +43,7 @@ export class Auth {
     const password = this.passwords[credentials.email];
 
     if (user && password === credentials.password) {
-      // Simuler un délai réseau
+      // Simulate network delay
       return of(user).pipe(delay(500));
     } else {
       return throwError(() => new Error('Email ou mot de passe incorrect'));
@@ -51,13 +51,13 @@ export class Auth {
   }
 
   register(userData: RegisterRequest): Observable<User> {
-    // Vérifier si l'email existe déjà
+    // Verify if email already exists
     const existingUser = this.users.find((u) => u.email === userData.email);
     if (existingUser) {
       return throwError(() => new Error('Cet email est déjà utilisé'));
     }
 
-    // Créer un nouvel utilisateur
+    // Create new user
     const newUser: User = {
       id: this.users.length + 1,
       name: userData.name,
@@ -65,11 +65,11 @@ export class Auth {
       role: 'user',
     };
 
-    // Ajouter aux mock data
+    // Add to mock datas
     this.users.push(newUser);
     this.passwords[userData.email] = userData.password;
 
-    // Simuler un délai réseau
+    // Simulate network delay
     return of(newUser).pipe(delay(500));
   }
 
@@ -104,7 +104,7 @@ export class Auth {
     return user ? `mock-token-${user.id}` : null;
   }
 
-  // Méthode pour définir l'utilisateur connecté (utilisée après login)
+  // Method to update the current user signal and localStorage
   setCurrentUser(user: User): void {
     this._currentUser.set(user);
     localStorage.setItem('currentUser', JSON.stringify(user));

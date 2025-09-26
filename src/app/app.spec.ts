@@ -16,7 +16,7 @@ beforeEach(async () => {
           isEnabled: false,
           versionUpdates: {
             subscribe: () => {
-              console.info('');
+              console.warn('');
             },
           },
         },

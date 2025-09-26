@@ -11,10 +11,10 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const currentUser = authService.getCurrentUser();
 
   if (currentUser && currentUser.role === 'admin') {
-    return true; // Accès admin autorisé
+    return true; // Autorized
   } else {
-    // Rediriger vers la page d'accueil
+    // Redirect to home page
     router.navigate(['/']);
-    return false; // Accès refusé
+    return false; // Refused
   }
 };

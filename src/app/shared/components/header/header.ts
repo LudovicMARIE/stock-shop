@@ -36,7 +36,7 @@ export class HeaderComponent {
   currentUser = this.Auth.currentUser;
 
   constructor() {
-    // Utiliser directement le signal du service
+    // Directly use service's signal
     this.currentUser = this.Auth.currentUser;
   }
 
